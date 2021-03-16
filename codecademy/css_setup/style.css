@@ -1,6 +1,11 @@
 h1 {
     color: maroon;
-  }
-  p {
+}
+
+p {
     font-family: Arial;
-  }
+}
+
+.title {
+    color: teal;
+}
