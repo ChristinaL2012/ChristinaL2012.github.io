@@ -13,3 +13,8 @@ p {
 .title {
     color: teal;
 }
+
+#article-title {
+    font-family: cursive;
+    text-transform: capitalize;
+}
