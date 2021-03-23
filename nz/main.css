@@ -1,14 +1,14 @@
-body{
+body {
     max-width: 1280px;
     margin: auto;
     font-family: 'Open Sans', sans-serif;
 }
 
-header{
+header {
     text-align: center;
 }
 
-header p{
+header p {
     text-align: right;
     font-weight: bold;
     font-size: 0.8em;
@@ -18,23 +18,22 @@ header p{
 
 .white,
 .white a:link,
-.white a:visited
-{
+.white a:visited {
     color: white;
 }
 
-header nav img{
+header nav img {
     border-radius: 50%;
 }
 
 a:link,
 a:visited {
-    color:black;
+    color: black;
 }
 
 header address {
     font-size: 0.9em;
-    font-style:italic;
+    font-style: italic;
 }
 
 main {
@@ -42,58 +41,58 @@ main {
     margin: auto;
 }
 
-main p{
+main p {
     text-align: justify;
     font-family: 'Roboto Condensed', sans-serif;
 }
 
-main figure{
+main figure {
     margin-left: 0;
     width: 100%;
 }
 
-main figure img{
-    border:1px solid black;
+main figure img {
+    border: 1px solid black;
 }
 
-#map{
+#map {
     height: 360px;
     width: 100%;
     border: 1px solid gray;
 }
 
-main ul{
+main ul {
     list-style-type: circle;
 }
 
-footer .next{
+footer .next {
     float: right;
 }
 
-footer .back{
+footer .back {
     float: left;
 }
 
-footer{
+footer {
     padding: 1em 0 3em 0;
 }
 
-.mr-3{
+.mr-3 {
     margin-right: 0.3em;
 }
 
-.ml-3{
+.ml-3 {
     margin-left: 0.3em;
 }
 
 @media screen and (max-width:900px) {
-    main{
-        max-width:90%;
+    main {
+        max-width: 90%;
     }
 }
 
-@media screen and (max-width:1280px){
-    header img.banner{
-        width:100vw;
+@media screen and (max-width:1280px) {
+    header img.banner {
+        width: 100vw;
     }
 }
