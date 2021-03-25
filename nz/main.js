@@ -7,5 +7,8 @@ const map = L.map("map", {
 });
 
 let mrk = L.marker([-38.684444, 176.070833]).addTo(map);
+mrk.bindPopup("Taupo").openPopup();
+
+
 //WMTS-Services
 console.log(document.querySelector("#map"));
