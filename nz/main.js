@@ -18,7 +18,10 @@ const map = L.map("map", {
 });
 
 let mrk = L.marker([stop.lat, stop.lng]).addTo(map);
-mrk.bindPopup("Taupo").openPopup();
+mrk.bindPopup(`
+    <h4>${$stop.nr}: ${stop.name}`) </h4>
+    <p><a href="${stop.wikipedia}">Read more about stop in Wikipedia</a></p>
+    .openPopup();
 
 
 //WMTS-Services
