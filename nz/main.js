@@ -10,15 +10,15 @@ let stop = {
 console.log(stop);
 
 const map = L.map("map", {
-    center: [stop.lat, stop.lng],
-    zoom: 13,
+    //center: [stop.lat, stop.lng],
+    //zoom: 13,
     layers: [
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
     ]
 });
 
 console.log(ROUTE);
-for (let entry of ROUTE) {
+for(let entry of ROUTE) {
     console.log(entry);
 
     let mrk = L.marker([entry.lat, entry.lng]).addTo(map);
@@ -28,6 +28,7 @@ for (let entry of ROUTE) {
     `);
 
   if(entry.nr==23) {
+      map.setView([entry.lat, entry.lng], 13)
       mrk.openPopup ();
   }  
 }
