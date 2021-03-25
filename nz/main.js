@@ -1,2 +1,9 @@
-const map = L.map("map");
+const map = L.map("map", {
+    center: [-38.684444, 176.070833],
+    zoom: 13,
+    layers: [
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
+    ]
+});
+//WMTS-Services
 console.log(document.querySelector("#map"));
