@@ -43,15 +43,19 @@ for(let entry of ROUTE) {
       map.setView([entry.lat, entry.lng], 13)
       mrk.openPopup ();
   }  
+}
 
+nav.options.selectedIndex = 23 - 1;
 nav.onchange = (evt) => {
     let selected = evt.target.selectedIndex;
     let options = evt.target.options;
     let username = options[selected].value;
     let link = `https://${username}.github.io/nz/index.html`;
     console.log(username, link);
+
+    window.location.href = link;
 };
-}
+
 
 
 
