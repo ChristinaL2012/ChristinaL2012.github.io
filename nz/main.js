@@ -17,10 +17,16 @@ const map = L.map("map", {
     ]
 });
 
-console.log(ROUTE);
-for(let entry of ROUTE) {
-    console.log(entry);
+let nav = document.querySelector("#navigation");
+console.log (nav);
 
+//console.log(ROUTE);
+for(let entry of ROUTE) {
+    //console.log(entry);
+
+    nav.innerHTML +=  `
+        <option value="${entry.user}">Stop ${entry.nr}: ${entry.name}</option>
+    `;
     let mrk = L.marker([entry.lat, entry.lng]).addTo(map);
     mrk.bindPopup(`
         <h4>Stop ${entry.nr}: ${entry.name} </h4>
@@ -37,3 +43,4 @@ for(let entry of ROUTE) {
 
 //WMTS-Services
 //console.log(document.querySelector("#map"));
+//<option value="ChristinaL2012">Taupo</option>
