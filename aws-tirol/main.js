@@ -29,15 +29,19 @@ let layerControl = L.control.layers({
 
 let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
 
+//https://leafletjs.com/reference-1.7.1.html#featuregroup
 let awsLayer = L.featureGroup();
 layerControl.addOverlay(awsLayer, "Wetterstationen Tirol");
 // awsLayer.addTo(map);
+//https://leafletjs.com/reference-1.7.1.html#featuregroup
 let snowLayer = L.featureGroup();
 layerControl.addOverlay(snowLayer, "Schneehöhen (cm)");
 // snowLayer.addTo(map);
+//https://leafletjs.com/reference-1.7.1.html#featuregroup
 let windLayer = L.featureGroup();
 layerControl.addOverlay(windLayer, "Windgeschwindigkeit (km/h)");
 windLayer.addTo(map);
+//https://leafletjs.com/reference-1.7.1.html#featuregroup
 let tempLayer = L.featureGroup();
 layerControl.addOverlay(tempLayer, "Lufttemperatur (°C)");
 tempLayer.addTo(map);
