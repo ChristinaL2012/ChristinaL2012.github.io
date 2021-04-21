@@ -53,6 +53,7 @@ fetch(awsUrl)
         console.log('Daten konvertiert: ', json);
         for (station of json.features) {
             // console.log('Station: ', station);
+            //https://leafletjs.com/reference-1.7.1.html#marker
             let marker = L.marker([
                 station.geometry.coordinates[1],
                 station.geometry.coordinates[0]
@@ -79,9 +80,11 @@ fetch(awsUrl)
                 if (station.properties.HS > 200) {
                     highlightClass = 'snow-200';
                 }
+                //https://leafletjs.com/reference-1.7.1.html#divicon
                 let snowIcon = L.divIcon({
                     html: `<div class="snow-label ${highlightClass}">${station.properties.HS}</div>`
                 })
+                //https://leafletjs.com/reference-1.7.1.html#marker
                 let snowMarker = L.marker([
                     station.geometry.coordinates[1],
                     station.geometry.coordinates[0]
@@ -98,9 +101,11 @@ fetch(awsUrl)
                 if (station.properties.WG > 20) {
                     windHighlightClass = 'wind-20';
                 }
+                //https://leafletjs.com/reference-1.7.1.html#divicon
                 let windIcon = L.divIcon({
                     html: `<div class="wind-label ${windHighlightClass}">${station.properties.WG}</div>`,
                 });
+                //https://leafletjs.com/reference-1.7.1.html#marker
                 let windMarker = L.marker([
                     station.geometry.coordinates[1],
                     station.geometry.coordinates[0]
@@ -142,10 +147,12 @@ fetch(awsUrl)
                     tempHighlightClass = 'temp-neg';
                 }
 
+                //https://leafletjs.com/reference-1.7.1.html#divicon
                 let tempIcon = L.divIcon({
                     html: `<div class="temp-label ${tempHighlightClass}">${station.properties.LT}</div>`,
                 });
 
+                //https://leafletjs.com/reference-1.7.1.html#marker
                 let tempMarker = L.marker([
                     station.geometry.coordinates[1],
                     station.geometry.coordinates[0]
@@ -155,10 +162,12 @@ fetch(awsUrl)
 
                 tempMarker.addTo(tempLayer);
             } else if (station.properties.LT == 0) {
+                //https://leafletjs.com/reference-1.7.1.html#divicon
                 let tempIcon = L.divIcon({
                     html: `<div class="temp-label ${tempHighlightClass}">${station.properties.LT}</div>`,
                 });
 
+                //https://leafletjs.com/reference-1.7.1.html#marker
                 let tempMarker = L.marker([
                     station.geometry.coordinates[1],
                     station.geometry.coordinates[0]
