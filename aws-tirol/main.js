@@ -1,5 +1,7 @@
+//https://leafletjs.com/reference-1.7.1.html#tilelayer
 let basemapGray = L.tileLayer.provider('BasemapAT.grau');
 
+//https://leafletjs.com/reference-1.7.1.html#map
 let map = L.map("map", {
     center: [47, 11],
     zoom: 9,
@@ -8,6 +10,7 @@ let map = L.map("map", {
     ]
 });
 
+//https://leafletjs.com/reference-1.7.1.html#control-layers
 let layerControl = L.control.layers({
     "BasemapAT.grau": basemapGray,
     "BasemapAT.orthofoto": L.tileLayer.provider('BasemapAT.orthofoto'),
@@ -142,9 +145,7 @@ fetch(awsUrl)
                 });
 
                 tempMarker.addTo(tempLayer);
-            }
-
-            else if (station.properties.LT == 0) {
+            } else if (station.properties.LT == 0) {
                 let tempIcon = L.divIcon({
                     html: `<div class="temp-label ${tempHighlightClass}">${station.properties.LT}</div>`,
                 });
