@@ -94,6 +94,7 @@ fetch(awsUrl)
                 });
                 windMarker.addTo(windLayer);
             }
+            /* switch Versuch 
             let temperatureHighlightClass = '';
             switch (station.properties.LT) {
                 case (station.properties.LT < 0):
@@ -104,7 +105,7 @@ fetch(awsUrl)
                     break;
                 }
                 let temperatureIcon = L.divIcon({
-                    html: `<div class="wind-label ${temperatureHighligtClass}">${station.properties.LT}</div>`,
+                    html: `<div class="temperature-label ${temperatureHighligtClass}">${station.properties.LT}</div>`,
                 })
                 let temperatureMarker = L.marker([
                     station.geometry.coordinates[1],
@@ -114,7 +115,30 @@ fetch(awsUrl)
                 });
                 temperatureMarker.addTo(temperatureLayer);
                 }
+            }*/
 
+            if (station.properties.LT) {
+                let tempHighlightClass = '';
+
+                if (station.properties.LT > 0) {
+                    tempHighlightClass = 'temp-pos';
+                }
+                if (station.properties.LT < 0) {
+                    tempHighlightClass = 'temp-neg';
+                }
+
+                let tempIcon = L.divIcon({
+                    html: `<div class="temp-label ${tempHighlightClass}">${station.properties.LT}</div>`,
+                });
+
+                let tempMarker = L.marker([
+                    station.geometry.coordinates[1],
+                    station.geometry.coordinates[0]
+                ], {
+                    icon: tempIcon
+                });
+
+                tempMarker.addTo(tempLayer);
             }
         }
         // set map view to all stations
