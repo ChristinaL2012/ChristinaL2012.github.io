@@ -94,6 +94,28 @@ fetch(awsUrl)
                 });
                 windMarker.addTo(windLayer);
             }
+            let temperatureHighlightClass = '';
+            switch (station.properties.LT) {
+                case (station.properties.LT < 0):
+                    temperatureHighlightClass = 'temperature-0';
+                    break;
+                case (station.properties.LT >= 0): 
+                    temperatureHighlightClass = 'temperature+=0';
+                    break;
+                }
+                let temperatureIcon = L.divIcon({
+                    html: `<div class="wind-label ${temperatureHighligtClass}">${station.properties.LT}</div>`,
+                })
+                let temperatureMarker = L.marker([
+                    station.geometry.coordinates[1],
+                    station.geometry.coordinates[0]
+                ],  {
+                    icon:temperatureIcon
+                });
+                temperatureMarker.addTo(temperatureLayer);
+                }
+
+            }
         }
         // set map view to all stations
         map.fitBounds(awsLayer.getBounds());
