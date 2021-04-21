@@ -13,10 +13,15 @@ let map = L.map("map", {
 //https://leafletjs.com/reference-1.7.1.html#control-layers
 let layerControl = L.control.layers({
     "BasemapAT.grau": basemapGray,
+    //https://leafletjs.com/reference-1.7.1.html#tilelayer
     "BasemapAT.orthofoto": L.tileLayer.provider('BasemapAT.orthofoto'),
+    //https://leafletjs.com/reference-1.7.1.html#tilelayer
     "BasemapAT.surface": L.tileLayer.provider('BasemapAT.surface'),
+    //https://leafletjs.com/reference-1.7.1.html#layergroup
     "BasemapAT.overlay+ortho": L.layerGroup([
+        //https://leafletjs.com/reference-1.7.1.html#tilelayer
         L.tileLayer.provider('BasemapAT.orthofoto'),
+        //https://leafletjs.com/reference-1.7.1.html#tilelayer
         L.tileLayer.provider('BasemapAT.overlay')
     ])
 }).addTo(map);
