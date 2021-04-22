@@ -52,32 +52,17 @@ L.control.scale({
 
 let newLabel = (coords, options) => {
     let label = L.divIcon({
-        html: `<div>${options.value}</div>`
+        html: `<div>${options.value}</div>`,
         className: "text-label"
+    })
+    let marker = L.marker([coords[1],coords[0]], {
+        icon: label
     });
-
-    let marker = L.marker([coords[1], coords[0]]);
-    console.log("Marker:", marker);
     return marker;
+};
     //Label erstellen
     //den Label zurückgeben
-};
-//
 
-/*layerControl.addOverlay(overlays.stations, "Wetterstationen Tirol");
-// awsLayer.addTo(map);
-//https://leafletjs.com/reference-1.7.1.html#featuregroup
-let snowLayer = L.featureGroup();
-layerControl.addOverlay(snowLayer, "Schneehöhen (cm)");
-// snowLayer.addTo(map);
-//https://leafletjs.com/reference-1.7.1.html#featuregroup
-let windLayer = L.featureGroup();
-layerControl.addOverlay(windLayer, "Windgeschwindigkeit (km/h)");
-windLayer.addTo(map);
-//https://leafletjs.com/reference-1.7.1.html#featuregroup
-let temperatureLayer = L.featureGroup();
-layerControl.addOverlay(temperatureLayer, "Lufttemperatur (°C)");
-temperatureLayer.addTo(map);*/
 
 let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
 fetch(awsUrl)
@@ -104,49 +89,37 @@ fetch(awsUrl)
             </ul>
             <a target="_blank" href="https://wiski.tirol.gv.at/lawine/grafiken/1100/standard/tag/${station.properties.plot}.png">Grafik</a>
             `);
+
+
             marker.addTo(overlays.stations);
             if (typeof station.properties.HS == "number") {
-                let highlightClass = '';
-                if (station.properties.HS > 100) {
-                    highlightClass = 'snow-100';
-                }
-                if (station.properties.HS > 200) {
-                    highlightClass = 'snow-200';
-                }
-                //https://leafletjs.com/reference-1.7.1.html#divicon
-                let snowIcon = L.divIcon({
-                    html: `<div class="snow-label ${highlightClass}">${station.properties.HS}</div>`
-                })
-                //https://leafletjs.com/reference-1.7.1.html#marker
-                let snowMarker = L.marker([
-                    station.geometry.coordinates[1],
-                    station.geometry.coordinates[0]
-                ], {
-                    icon: snowIcon
+                let marker = newLabel(station.geometry.coordinates, {
+                    value: station.properties.HS
                 });
-                snowMarker.addTo(overlays.snowheight);
-            }
+                marker.addTo(overlays.snowheight);
+            } 
+            
             if (typeof station.properties.WG == "number") {
-                let windHighlightClass = '';
-                if (station.properties.WG > 10) {
-                    windHighlightClass = 'wind-10';
-                }
-                if (station.properties.WG > 20) {
-                    windHighlightClass = 'wind-20';
-                }
-                //https://leafletjs.com/reference-1.7.1.html#divicon
-                let windIcon = L.divIcon({
-                    html: `<div class="wind-label ${windHighlightClass}">${station.properties.WG}</div>`,
+                let marker = newLabel(station.geometry.coordinates, {
+                    value: station.properties.WG
                 });
-                //https://leafletjs.com/reference-1.7.1.html#marker
-                let windMarker = L.marker([
-                    station.geometry.coordinates[1],
-                    station.geometry.coordinates[0]
-                ], {
-                    icon: windIcon
-                });
-                windMarker.addTo(overlays.winddirection);
+                marker.addTo(overlays.windspeed);
             }
+
+            if (typeof station.properties.LT == "number") {
+                let marker = newLabel(station.geometry.coordinates, {
+                    value: station.properties.LT
+                });
+                marker.addTo(overlays.temperature);
+            }
+
+        }
+        // set map view to all stations
+        map.fitBounds(overlays.stations.getBounds());
+    });
+
+
+
             /* switch Versuch 
             let temperatureHighlightClass = '';
             switch (station.properties.LT) {
@@ -210,20 +183,5 @@ fetch(awsUrl)
 
                 temperatureMarker.addTo(overlays.temperature);
             };*/
-
-            
-            //if Abfrage Temperatur in Kurs
-            if (typeof station.properties.LT == "number") {
-                let marker = newLabel(station.geometry.coordinates, {
-                    value: station.properties.LT
-                });
-                marker.addTo(overlays.temperature);
-            }
-
-        }
-        // set map view to all stations
-        map.fitBounds(overlays.stations.getBounds());
-    });
-
    
     //newLabel(.....).addTo(overlays.)
