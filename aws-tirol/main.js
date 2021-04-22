@@ -47,11 +47,24 @@ overlays.temperature.addTo(map);
 //Maßstab einbauen 
 
 L.control.scale({
-    metric:true,
     imperial:false
 }).addTo(map);
 
-layerControl.addOverlay(awsLayer, "Wetterstationen Tirol");
+let newLabel = (coords, options) => {
+    let label = L.divIcon({
+        html: `<div>${options.value}</div>`
+        className: "text-label"
+    });
+
+    let marker = L.marker([coords[1], coords[0]]);
+    console.log("Marker:", marker);
+    return marker;
+    //Label erstellen
+    //den Label zurückgeben
+};
+//
+
+/*layerControl.addOverlay(overlays.stations, "Wetterstationen Tirol");
 // awsLayer.addTo(map);
 //https://leafletjs.com/reference-1.7.1.html#featuregroup
 let snowLayer = L.featureGroup();
@@ -64,9 +77,9 @@ windLayer.addTo(map);
 //https://leafletjs.com/reference-1.7.1.html#featuregroup
 let temperatureLayer = L.featureGroup();
 layerControl.addOverlay(temperatureLayer, "Lufttemperatur (°C)");
-temperatureLayer.addTo(map);
+temperatureLayer.addTo(map);*/
 
-
+let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
 fetch(awsUrl)
     .then(response => response.json())
     .then(json => {
@@ -91,7 +104,7 @@ fetch(awsUrl)
             </ul>
             <a target="_blank" href="https://wiski.tirol.gv.at/lawine/grafiken/1100/standard/tag/${station.properties.plot}.png">Grafik</a>
             `);
-            marker.addTo(awsLayer);
+            marker.addTo(overlays.stations);
             if (typeof station.properties.HS == "number") {
                 let highlightClass = '';
                 if (station.properties.HS > 100) {
@@ -155,7 +168,7 @@ fetch(awsUrl)
                 });
                 temperatureMarker.addTo(temperatureLayer);
                 }
-            }*/
+            }
 
             if (typeof station.properties.LT == "number") {
                 let tempatureHighlightClass = '';
@@ -196,9 +209,21 @@ fetch(awsUrl)
                 });
 
                 temperatureMarker.addTo(overlays.temperature);
-            };
+            };*/
+
+            
+            //if Abfrage Temperatur in Kurs
+            if (typeof station.properties.LT == "number") {
+                let marker = newLabel(station.geometry.coordinates, {
+                    value: station.properties.LT
+                });
+                marker.addTo(overlays.temperature);
+            }
 
         }
         // set map view to all stations
         map.fitBounds(overlays.stations.getBounds());
     });
+
+   
+    //newLabel(.....).addTo(overlays.)
