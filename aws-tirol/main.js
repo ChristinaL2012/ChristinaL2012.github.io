@@ -38,15 +38,19 @@ let layerControl = L.control.layers({
     "Temperatur (°C)": overlays.temperature,
     "Schneehöhe (cm)": overlays.snowheight,
     "Windgeschwindigkeit (km/h)": overlays.windspeed,
-    "Windrichtung": oberlays.winddirection
+    "Windrichtung": overlays.winddirection
+},{
+    collapsed:false
 }).addTo(map);
 overlays.temperature.addTo(map);
 
+//Maßstab einbauen 
 
-let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
+L.control.scale({
+    metric:true,
+    imperial:false
+}).addTo(map);
 
-//https://leafletjs.com/reference-1.7.1.html#featuregroup
-let awsLayer = L.featureGroup();
 layerControl.addOverlay(awsLayer, "Wetterstationen Tirol");
 // awsLayer.addTo(map);
 //https://leafletjs.com/reference-1.7.1.html#featuregroup
@@ -58,9 +62,9 @@ let windLayer = L.featureGroup();
 layerControl.addOverlay(windLayer, "Windgeschwindigkeit (km/h)");
 windLayer.addTo(map);
 //https://leafletjs.com/reference-1.7.1.html#featuregroup
-let tempLayer = L.featureGroup();
-layerControl.addOverlay(tempLayer, "Lufttemperatur (°C)");
-tempLayer.addTo(map);
+let temperatureLayer = L.featureGroup();
+layerControl.addOverlay(temperatureLayer, "Lufttemperatur (°C)");
+temperatureLayer.addTo(map);
 
 
 fetch(awsUrl)
@@ -88,7 +92,7 @@ fetch(awsUrl)
             <a target="_blank" href="https://wiski.tirol.gv.at/lawine/grafiken/1100/standard/tag/${station.properties.plot}.png">Grafik</a>
             `);
             marker.addTo(awsLayer);
-            if (station.properties.HS) {
+            if (typeof station.properties.HS == "number") {
                 let highlightClass = '';
                 if (station.properties.HS > 100) {
                     highlightClass = 'snow-100';
@@ -109,7 +113,7 @@ fetch(awsUrl)
                 });
                 snowMarker.addTo(overlays.snowheight);
             }
-            if (station.properties.WG) {
+            if (typeof station.properties.WG == "number") {
                 let windHighlightClass = '';
                 if (station.properties.WG > 10) {
                     windHighlightClass = 'wind-10';
@@ -153,46 +157,47 @@ fetch(awsUrl)
                 }
             }*/
 
-            if (station.properties.LT) {
-                let tempHighlightClass = '';
+            if (typeof station.properties.LT == "number") {
+                let tempatureHighlightClass = '';
 
                 if (station.properties.LT > 0) {
-                    tempHighlightClass = 'temp-pos';
+                    tempatureHighlightClass = 'temp-pos';
                 }
                 if (station.properties.LT < 0) {
-                    tempHighlightClass = 'temp-neg';
+                    temperatureHighlightClass = 'temp-neg';
                 }
 
                 //https://leafletjs.com/reference-1.7.1.html#divicon
-                let tempIcon = L.divIcon({
-                    html: `<div class="temp-label ${tempHighlightClass}">${station.properties.LT}</div>`,
+                let temperatureIcon = L.divIcon({
+                    html: `<div class="temp-label ${temperatureHighlightClass}">${station.properties.LT}</div>`,
                 });
 
                 //https://leafletjs.com/reference-1.7.1.html#marker
-                let tempMarker = L.marker([
+                let temperatureMarker = L.marker([
                     station.geometry.coordinates[1],
                     station.geometry.coordinates[0]
                 ], {
-                    icon: tempIcon
+                    icon: temperatureIcon
                 });
 
-                tempMarker.addTo(tempLayer);
+                temperatureMarker.addTo(temperatureLayer);
             } else if (station.properties.LT == 0) {
                 //https://leafletjs.com/reference-1.7.1.html#divicon
-                let tempIcon = L.divIcon({
-                    html: `<div class="temp-label ${tempHighlightClass}">${station.properties.LT}</div>`,
+                let temperatureIcon = L.divIcon({
+                    html: `<div class="temp-label ${temperatureHighlightClass}">${station.properties.LT}</div>`,
                 });
 
                 //https://leafletjs.com/reference-1.7.1.html#marker
-                let tempMarker = L.marker([
+                let temperatureMarker = L.marker([
                     station.geometry.coordinates[1],
                     station.geometry.coordinates[0]
                 ], {
-                    icon: tempIcon
+                    icon: temperatureIcon
                 });
 
-                tempMarker.addTo(overlays.temperature);
-            }
+                temperatureMarker.addTo(overlays.temperature);
+            };
+
         }
         // set map view to all stations
         map.fitBounds(overlays.stations.getBounds());
