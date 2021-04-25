@@ -62,9 +62,19 @@ let getColor = (value, colorRamp) => {
     return "black";
 };
 
+let getDirection = (value, directionRamp) => {
+    for (let rule of directionRamp) {
+        if (value >= rule.min && value < rule.max) {
+            return rule.dir;
+        }
+    }
+    return "black";
+};
+
 let newLabel = (coords, options) => {
     let color = getColor(options.value, options.colors);
     //console.log("Wert", options.value, "bekommt Farbe", color);
+    let direction = getDirection(options.value, options.directions);
     let label = L.divIcon({
         html: `<div style="background-color:${color}">${options.value}</div>`,
         className: "text-label"
@@ -124,6 +134,15 @@ fetch(awsUrl)
                     station: station.properties.name
                 });
                 marker.addTo(overlays.windspeed);
+            }
+
+            if (typeof station.properties.WR == "number") {
+                let marker = newLabel(station.properties.coordinates, {
+                    value: station.properties.WR,
+                    directions: DIRECTIONS,
+                    station: station.properties.name
+                });
+                marker.addTo(overlays.winddirection);
             }
 
             if (typeof station.properties.LT == "number") {
