@@ -11,7 +11,7 @@ let map = L.map("map", {
 });
 
 //setup rainviewer plugin 
-L.control.rainviwer({ 
+L.control.rainviewer({ 
     position: 'bottomleft',
     nextButtonText: '>',
     playStopButtonText: 'Play/Stop',
