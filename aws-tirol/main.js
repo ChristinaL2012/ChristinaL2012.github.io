@@ -10,17 +10,6 @@ let map = L.map("map", {
     ]
 });
 
-//setup rainviewer plugin 
-L.control.rainviewer({ 
-    position: 'bottomleft',
-    nextButtonText: '>',
-    playStopButtonText: 'Play/Stop',
-    prevButtonText: '<',
-    positionSliderLabelText: "Hour:",
-    opacitySliderLabelText: "Opacity:",
-    animationInterval: 500,
-    opacity: 0.5
-}).addTo(map);
 
 let overlays = {
     stations: L.featureGroup(),
@@ -99,20 +88,6 @@ let newLabel = (coords, options) => {
     //Label erstellen
     //den Label zurückgeben
 
-    /*let newLabel = (coords, options) => {
-        let direction = getDirection(options.value, options.colors);
-        //console.log("Wert", options.value, "bekommt Richtung", direction);
-        let label = L.divIcon({
-            html: `<div style="background-color:${direction}">${options.value}</div>`,
-            className: "text-label"
-        })
-        let marker = L.marker([coords[1], coords[0]], {
-            icon: label,
-            title: `${options.station} (${coords[2]}m)`
-        });
-        return marker;
-    };*/
-
 
 let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
 fetch(awsUrl)
@@ -127,6 +102,15 @@ fetch(awsUrl)
                 station.geometry.coordinates[0]
             ]);
             let formattedDate = new Date(station.properties.date);
+
+            //Funktion direction 
+            let direction = '';
+            if (typeof station.properties.WR == "number"){
+                direction = getDirection(station.properties.WR,DIRECTIONS);
+            } else {
+                direction = "NA";
+            }
+
             marker.bindPopup(`
             <h3>${station.properties.name}</h3>
             <ul>
@@ -135,13 +119,13 @@ fetch(awsUrl)
               <li>Temperatur: ${station.properties.LT} C</li>
               <li>Schneehöhe: ${station.properties.HS || '?'} cm</li>
               <li>Windgeschwindigkeit: ${station.properties.WG || '?'} km/h</li>
-              <li>Windrichtung: ${station.properties.WR || '?'}</li>
+              <li>Windrichtung: ${direction || '?'}</li>
               <li>Relative Luftfeuchtigkeit: ${station.properties.LF || '?'} %</li>
             </ul>
             <a target="_blank" href="https://wiski.tirol.gv.at/lawine/grafiken/1100/standard/tag/${station.properties.plot}.png">Grafik</a>
             `);
 
-
+            //Schneehöhe HS 
             marker.addTo(overlays.stations);
             if (typeof station.properties.HS == "number") {
                 let marker = newLabel(station.geometry.coordinates, {
@@ -152,6 +136,7 @@ fetch(awsUrl)
                 marker.addTo(overlays.snowheight);
             } 
             
+            //Windgeschwindigkeit WG
             if (typeof station.properties.WG == "number") {
                 let marker = newLabel(station.geometry.coordinates, {
                     value: station.properties.WG.toFixed(0),
@@ -161,15 +146,7 @@ fetch(awsUrl)
                 marker.addTo(overlays.windspeed);
             }
 
-            /*if (typeof station.properties.WR == "string") {
-                let marker = newLabel(station.properties.coordinates, {
-                    value: station.properties.WR,
-                    directions: DIRECTIONS,
-                    station: station.properties.name
-                });
-                marker.addTo(overlays.winddirection);
-            }*/
-
+            //Lufttemperatur LT
             if (typeof station.properties.LT == "number") {
                 let marker = newLabel(station.geometry.coordinates, {
                     value: station.properties.LT.toFixed(1),
@@ -179,6 +156,7 @@ fetch(awsUrl)
                 marker.addTo(overlays.temperature);
             }
             
+            //Luftfeuchtigkeit RH
             if (typeof station.properties.RH == "number") {
                 let marker = newLabel(station.geometry.coordinates, {
                     value: station.properties.RH.toFixed(0),
@@ -192,6 +170,18 @@ fetch(awsUrl)
         // set map view to all stations
         map.fitBounds(overlays.stations.getBounds());
     });
+
+//setup rainviewer plugin 
+L.control.rainviewer({ 
+    position: 'bottomleft',
+    nextButtonText: '>',
+    playStopButtonText: 'Play/Stop',
+    prevButtonText: '<',
+    positionSliderLabelText: "Hour:",
+    opacitySliderLabelText: "Opacity:",
+    animationInterval: 500,
+    opacity: 0.5
+}).addTo(map);
 
 
 
