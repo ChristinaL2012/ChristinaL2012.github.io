@@ -10,6 +10,18 @@ let map = L.map("map", {
     ]
 });
 
+//setup rainviewer plugin 
+L.control.rainviwer({ 
+    position: 'bottomleft',
+    nextButtonText: '>',
+    playStopButtonText: 'Play/Stop',
+    prevButtonText: '<',
+    positionSliderLabelText: "Hour:",
+    opacitySliderLabelText: "Opacity:",
+    animationInterval: 500,
+    opacity: 0.5
+}).addTo(map);
+
 let overlays = {
     stations: L.featureGroup(),
     temperature: L.featureGroup(),
@@ -62,8 +74,8 @@ let getColor = (value, colorRamp) => {
     return "black";
 };
 
-let getDirection = (value, directionRamp) => {
-    for (let rule of directionRamp) {
+let getDirection = (value, direction) => {
+    for (let rule of direction) {
         if (value >= rule.min && value < rule.max) {
             return rule.dir;
         }
@@ -74,7 +86,6 @@ let getDirection = (value, directionRamp) => {
 let newLabel = (coords, options) => {
     let color = getColor(options.value, options.colors);
     //console.log("Wert", options.value, "bekommt Farbe", color);
-    let direction = getDirection(options.value, options.directions);
     let label = L.divIcon({
         html: `<div style="background-color:${color}">${options.value}</div>`,
         className: "text-label"
@@ -87,6 +98,20 @@ let newLabel = (coords, options) => {
 };
     //Label erstellen
     //den Label zurückgeben
+
+    /*let newLabel = (coords, options) => {
+        let direction = getDirection(options.value, options.colors);
+        //console.log("Wert", options.value, "bekommt Richtung", direction);
+        let label = L.divIcon({
+            html: `<div style="background-color:${direction}">${options.value}</div>`,
+            className: "text-label"
+        })
+        let marker = L.marker([coords[1], coords[0]], {
+            icon: label,
+            title: `${options.station} (${coords[2]}m)`
+        });
+        return marker;
+    };*/
 
 
 let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
@@ -136,14 +161,14 @@ fetch(awsUrl)
                 marker.addTo(overlays.windspeed);
             }
 
-            if (typeof station.properties.WR == "number") {
+            /*if (typeof station.properties.WR == "string") {
                 let marker = newLabel(station.properties.coordinates, {
                     value: station.properties.WR,
                     directions: DIRECTIONS,
                     station: station.properties.name
                 });
                 marker.addTo(overlays.winddirection);
-            }
+            }*/
 
             if (typeof station.properties.LT == "number") {
                 let marker = newLabel(station.geometry.coordinates, {
@@ -170,30 +195,9 @@ fetch(awsUrl)
 
 
 
-            /* switch Versuch 
-            let temperatureHighlightClass = '';
-            switch (station.properties.LT) {
-                case (station.properties.LT < 0):
-                    temperatureHighlightClass = 'temperature-0';
-                    break;
-                case (station.properties.LT >= 0): 
-                    temperatureHighlightClass = 'temperature+=0';
-                    break;
-                }
-                let temperatureIcon = L.divIcon({
-                    html: `<div class="temperature-label ${temperatureHighligtClass}">${station.properties.LT}</div>`,
-                })
-                let temperatureMarker = L.marker([
-                    station.geometry.coordinates[1],
-                    station.geometry.coordinates[0]
-                ],  {
-                    icon:temperatureIcon
-                });
-                temperatureMarker.addTo(temperatureLayer);
-                }
-            }
+     
 
-            if (typeof station.properties.LT == "number") {
+            /*if (typeof station.properties.LT == "number") {
                 let tempatureHighlightClass = '';
 
                 if (station.properties.LT > 0) {
