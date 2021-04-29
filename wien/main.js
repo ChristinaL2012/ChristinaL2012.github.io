@@ -69,11 +69,17 @@ let drawBusStop = (geojsonData) => {
 
 let drawBusLines = (geojsonData) => {
     L.geoJson(geojsonData, {
-        style:() => {
-            let col = "red";
-            if (feature.properties,LINE_NAME == 'Blue Line') {
-                col = "blue";
+        style:(feature) => {
+            col = COLORS.buslines[feature.properties.LINE_NAME];
+            /*if (feature.properties,LINE_NAME == 'Blue Line') {
+                col = COLORS.buslines["Blue Line"];
             }
+            if (feature.properties,LINE_NAME == 'Grey Line') {
+                col = COLORS.buslines["Grey Line"];
+            }
+            if (feature.properties,LINE_NAME == 'Yellow Line') {
+                col = COLORS.buslines["Yellow Line"];
+            }*/
             return{
                 color: col
             }
