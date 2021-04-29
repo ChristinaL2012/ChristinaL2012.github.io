@@ -40,13 +40,15 @@ let layerControl = L.control.layers({
 }, {
     "Liniennetz Vienna Sightseeing": overlays.busLines,
     "Haltestellen Vienna Sightseeing": overlays.busStops,
-    "Fußgängerzonen": overlays.pedAreas
+    "Fußgängerzonen": overlays.pedAreas,
+    "Sehenswürdigkeiten": overlays.sights
 }).addTo(map);
 
 // alle Overlays nach dem Laden anzeigen
 overlays.busLines.addTo(map);
 overlays.busStops.addTo(map);
 overlays.pedAreas.addTo(map);
+overlays.sights.addTo(map);
 
 let drawBusStop = (geojsonData) => {
     L.geoJson(geojsonData, {
@@ -71,15 +73,6 @@ let drawBusLines = (geojsonData) => {
     L.geoJson(geojsonData, {
         style:(feature) => {
             col = COLORS.buslines[feature.properties.LINE_NAME];
-            /*if (feature.properties,LINE_NAME == 'Blue Line') {
-                col = COLORS.buslines["Blue Line"];
-            }
-            if (feature.properties,LINE_NAME == 'Grey Line') {
-                col = COLORS.buslines["Grey Line"];
-            }
-            if (feature.properties,LINE_NAME == 'Yellow Line') {
-                col = COLORS.buslines["Yellow Line"];
-            }*/
             return{
                 color: col
             }
@@ -105,7 +98,7 @@ let drawPedestrianAreas = (geojsonData) => {
             }
         },
         onEachFeature: (feature, layer) => {
-            layer.bindPopup(`<strong>Fußgängerzone ${feature.properties.ADRESS}
+            layer.bindPopup(`<strong>Fußgängerzone ${feature.properties.ADRESSE}</strong>
             <hr>
             ${feature.properties.ZEITRAUM} <br>
             ${feature.properties.AUSN_TEXT}
@@ -113,6 +106,24 @@ let drawPedestrianAreas = (geojsonData) => {
         }
     }).addTo(overlays.pedAreas);
 }
+
+let drawSights = (geojsonData) => {
+    L.geoJson(geojsonData, {
+        onEachFeature: (feature, layer) => {
+            layer.bindPopup (`<strong> ${feature.properties.NAME}</strong>`)
+        },
+        pointToLayer: (geoJsonPoint, latlng) => {
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: 'icons/sehenswuerdigkeit.png',
+                    iconSize: [38, 38]
+                })
+            })
+        },
+        attribution: '<a href="https://data.wien.gv.at">Stadt Wien</a>'
+    }).addTo(overlays.sights);
+}
+
 
 for (let config of OGDWIEN) {
     console.log("Config: ", config.data);
@@ -124,8 +135,10 @@ for (let config of OGDWIEN) {
                 drawBusStop(geojsonData);
             } else if (config == "Liniennetz Vienna Sightseeing") {
                 drawBusLines(geojsonData);
-            } else if (config == "Fußgängerzonen") {
+            } else if (config === "Fußgängerzonen") {
                 drawPedestrianAreas(geojsonData);
+            } else if (config == "Sehenswürdigkeiten") {
+                drawSights(geojsonData);
             }
         })
 }
