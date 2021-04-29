@@ -56,6 +56,15 @@ fetch("data/TOURIATIKHTSVSLOGD.json")
             onEachFeature: (feature, layer) => {
                 layer.bindPopup(feature.properties.STAT_NAME)
             }
+
+            pointToLayer: (geoJsonPoint, latlng) => {
+                return L.marker(latlng, {
+                    icon: L.icon ({
+                        iconUrl: 'icons/bus.png',
+                        iconSize: [38, 38]
+                    })
+                })
+            }
         }).addTo(map);
     })
 
