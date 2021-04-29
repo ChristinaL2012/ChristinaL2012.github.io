@@ -48,23 +48,34 @@ overlays.busLines.addTo(map);
 overlays.busStops.addTo(map);
 overlays.pedAreas.addTo(map);
 
+let drawBusStop = (geojsonData) => {
+    L.geoJson(geojsonData, {
+        onEachFeature: (feature, layer) => {
+            layer.bindPopup(feature.properties.STAT_NAME)
+        }
 
-fetch("data/TOURIATIKHTSVSLOGD.json")
-    .then(response => response.json())
-    .then(stations => {
-        L.geoJson(stations, {
-            onEachFeature: (feature, layer) => {
-                layer.bindPopup(feature.properties.STAT_NAME)
-            }
-
-            pointToLayer: (geoJsonPoint, latlng) => {
-                return L.marker(latlng, {
-                    icon: L.icon ({
-                        iconUrl: 'icons/bus.png',
-                        iconSize: [38, 38]
-                    })
+        pointToLayer: (geoJsonPoint, latlng) => {
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: 'icons/bus.png',
+                    iconSize: [38, 38]
                 })
-            }
-        }).addTo(map);
-    })
+            })
+        }
+    }).addTo(map);
+}
 
+
+for (let config of OGDWIEN) {
+    //console.log("Config: ", config);
+    fetch(config.data)
+        .then(response => response.json())
+        .then(geojsonData => {
+            console.log("Data:", geojsonData);
+
+            if (config.title == "Haltestellen Vienna Sightseeing") {
+                drawBuStop(geojsonData);
+            }
+            L.geoJson(geojsonData).addTo(map);
+        })
+}
