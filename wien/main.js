@@ -123,7 +123,7 @@ let drawSights = (geojsonData) => {
         pointToLayer: (geoJsonPoint, latlng) => {
             return L.marker(latlng, {
                 icon: L.icon({
-                    iconUrl: 'icons/sehenswuerdigkeiten.png',
+                    iconUrl: 'icons/sehenswuerdigkeitenWien.png',
                     iconSize: [38, 38]
                 })
             })
