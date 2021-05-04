@@ -8,3 +8,8 @@ h2 {
     border: 1px solid gray;
     margin: auto;
 }
+
+footer {
+    margin-top: 0.5em;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}

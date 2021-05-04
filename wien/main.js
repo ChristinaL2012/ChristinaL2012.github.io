@@ -17,7 +17,8 @@ let baselayers = {
 let overlays = {
     busLines: L.featureGroup(),
     busStops: L.featureGroup(),
-    pedAreas: L.featureGroup()
+    pedAreas: L.featureGroup(),
+    sights: L.featureGroup()
 };
 
 // Karte initialisieren und auf Wiens Wikipedia Koordinate blicken
@@ -65,14 +66,14 @@ let drawBusStop = (geojsonData) => {
                 })
             })
         },
-        attribution: '<a href="https://data.wien.gv.at">Stadt Wien</a>, <a href="https://mapicons.mapsmarker.com">Maps Icons Collection</a>'
-    }).addTo(overlays.busStops);
+        attribution: '<a href="https://data.wien.gv.at">Stadt Wien</a>'
+        }).addTo(overlays.busStops);
 }
 
 let drawBusLines = (geojsonData) => {
     L.geoJson(geojsonData, {
-        style:(feature) => {
-            col = COLORS.buslines[feature.properties.LINE_NAME];
+        style: (feature) => {
+            let col = COLORS.buslines[feature.properties.LINE_NAME];
             return{
                 color: col
             }
@@ -81,10 +82,10 @@ let drawBusLines = (geojsonData) => {
             layer.bindPopup(`<strong>${feature.properties.LINE_NAME}</strong>
             <hr>
             von ${feature.properties.FROM_NAME}<br>
-            nach ${feature.properties.TO_NAME}
-            `);          
-        }
-    }).addTo(overlays.busLinies)
+            nach ${feature.properties.TO_NAME}`)          
+        },
+        attribution: '<a href="https://data.wien.gv.at">Stadt Wien</a>'
+    }).addTo(overlays.busLines);
 }
 
 let drawPedestrianAreas = (geojsonData) => {
@@ -94,28 +95,35 @@ let drawPedestrianAreas = (geojsonData) => {
                 stroke: true,
                 color: "silver",
                 fillColor: "yellow",
-                fillOpacity: 0,3
+                fillOpacity: 0.3
             }
         },
         onEachFeature: (feature, layer) => {
             layer.bindPopup(`<strong>Fußgängerzone ${feature.properties.ADRESSE}</strong>
             <hr>
-            ${feature.properties.ZEITRAUM} <br>
-            ${feature.properties.AUSN_TEXT}
+            ${feature.properties.ZEITRAUM || ""} <br>
+            ${feature.properties.AUSN_TEXT || ""}
             `);
-        }
+        },
+        attribution: '<a href="https://data.wien.gv.at">Stadt Wien</a>'
     }).addTo(overlays.pedAreas);
 }
 
 let drawSights = (geojsonData) => {
     L.geoJson(geojsonData, {
         onEachFeature: (feature, layer) => {
-            layer.bindPopup (`<strong> ${feature.properties.NAME}</strong>`)
+            layer.bindPopup (`
+            <img src="${feature.properties.THUMBNAIL}" alt="Vorschaubild"><br>
+            <strong> ${feature.properties.NAME}</strong>
+            <hr>
+            Adresse: ${feature.properties.ADRESSE}<br>
+            <a href="${feature.properties.WEITERE_INF}">Weblink</a>
+            `)
         },
         pointToLayer: (geoJsonPoint, latlng) => {
             return L.marker(latlng, {
                 icon: L.icon({
-                    iconUrl: 'icons/sehenswuerdigkeit.png',
+                    iconUrl: 'icons/sehenswuerdigkeiten.png',
                     iconSize: [38, 38]
                 })
             })
@@ -126,18 +134,18 @@ let drawSights = (geojsonData) => {
 
 
 for (let config of OGDWIEN) {
-    console.log("Config: ", config.data);
+    //console.log("Config: ", config.data);
     fetch(config.data)
         .then(response => response.json())
         .then(geojsonData => {
-            console.log("Data: ", geojsonData);
+            //console.log("Data: ", geojsonData);
             if (config.title == "Haltestellen Vienna Sightseeing") {
                 drawBusStop(geojsonData);
-            } else if (config == "Liniennetz Vienna Sightseeing") {
+            } else if (config.title == "Liniennetz Vienna Sightseeing") {
                 drawBusLines(geojsonData);
-            } else if (config === "Fußgängerzonen") {
+            } else if (config.title === "Fußgängerzonen") {
                 drawPedestrianAreas(geojsonData);
-            } else if (config == "Sehenswürdigkeiten") {
+            } else if (config.title === "Sehenswürdigkeiten Standorte") {
                 drawSights(geojsonData);
             }
         })
