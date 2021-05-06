@@ -70,14 +70,14 @@ let drawBusStop = (geojsonData) => {
             })
         },
         attribution: '<a href="https://data.wien.gv.at">Stadt Wien</a>'
-        }).addTo(overlays.busStops);
+    }).addTo(overlays.busStops);
 }
 
 let drawBusLines = (geojsonData) => {
     L.geoJson(geojsonData, {
         style: (feature) => {
             let col = COLORS.buslines[feature.properties.LINE_NAME];
-            return{
+            return {
                 color: col
             }
         },
@@ -85,7 +85,7 @@ let drawBusLines = (geojsonData) => {
             layer.bindPopup(`<strong>${feature.properties.LINE_NAME}</strong>
             <hr>
             von ${feature.properties.FROM_NAME}<br>
-            nach ${feature.properties.TO_NAME}`)          
+            nach ${feature.properties.TO_NAME}`)
         },
         attribution: '<a href="https://data.wien.gv.at">Stadt Wien</a>'
     }).addTo(overlays.busLines);
@@ -115,7 +115,7 @@ let drawPedestrianAreas = (geojsonData) => {
 let drawSights = (geojsonData) => {
     L.geoJson(geojsonData, {
         onEachFeature: (feature, layer) => {
-            layer.bindPopup (`
+            layer.bindPopup(`
             <img src="${feature.properties.THUMBNAIL}" alt="Vorschaubild"><br>
             <strong> ${feature.properties.NAME}</strong>
             <hr>
@@ -170,6 +170,21 @@ var miniMap = new L.Control.MiniMap(
 //Reachability plugin 
 L.control.reachability({
     // add settings/options here
-    apiKey: '5b3ce3597851110001cf624883b6bd66c6be4609a359cd876d3aacf1'
+    apiKey: '5b3ce3597851110001cf624883b6bd66c6be4609a359cd876d3aacf1',
+    drawButtonContent: '',
+    drawButtonStyleClass: 'fa fa-pencil-alt',
+    deleteButtonContent: '',
+    deleteButtonStyleClass: 'fa fa-trash',
+    distanceButtonContent: '',
+    distanceButtonStyleClass: 'fa fa-road',
+    timeButtonContent: '',
+    timeButtonStyleClass: 'fa fa-clock-o',
+    travelModeButton1Content: '',
+    travelModeButton1StyleClass: 'fa fa-car',
+    travelModeButton2Content: '',
+    travelModeButton2StyleClass: 'fa fa-bicycle',
+    travelModeButton3Content: '',
+    travelModeButton3StyleClass: 'fa fa-male',
+    travelModeButton4Content: '',
+    travelModeButton4StyleClass: 'fa fa-wheelchair'
 }).addTo(map);
-
