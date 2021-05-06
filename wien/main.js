@@ -13,6 +13,8 @@ let baselayers = {
     ]),
 };
 
+//minimap
+
 // Overlays für die Themen zum Ein- und Ausschalten definieren
 let overlays = {
     busLines: L.featureGroup(),
@@ -152,5 +154,15 @@ for (let config of OGDWIEN) {
         })
 }
 
+
+
 //Leaflet hash
 L.hash(map);
+
+//MiniMap
+var miniMap = new L.Control.MiniMap(
+    L.tileLayer.provider("BasemapAT.basemap"), {
+        toggleDisplay: true,
+        minimized: true
+    }
+).addTo(map);
